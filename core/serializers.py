@@ -28,12 +28,13 @@ class PlayerShortSerializer(ModelSerializer):
 
 
 class AuthByEmailPasswordSerializer(ModelSerializer):
-    email = serializers.EmailField(write_only=True, max_length=64)
+    email = serializers.EmailField(max_length=64)
 
     class Meta:
         model = Player
-        fields = ['email', 'password']
-        write_only_fields = ['password']
+        fields = ['id', 'username', 'email', 'password']
+        read_only_fields = ['username']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -45,8 +46,7 @@ class AuthByEmailPasswordSerializer(ModelSerializer):
             msg = 'Unable to log in with provided credentials.'
             raise NotAuthenticated(msg, 'authorization')
 
-        del attrs['email']
-        del attrs['password']
+        attrs['id'] = player.id
+        attrs['username'] = player.username
 
-        attrs['player'] = player
         return attrs

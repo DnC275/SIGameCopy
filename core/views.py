@@ -30,14 +30,9 @@ class SignUpViewSet(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         self.perform_create(serializer)
 
-        player = Player.objects.get(email=serializer.validated_data['email'])
-        token = player.generate_jwt_token()
         response = Response(status=status.HTTP_201_CREATED)
-        # response.set_cookie('access_token', token)
-
         return response
 
 
@@ -59,20 +54,27 @@ class LoginView(APIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        player = serializer.validated_data['player']
+        data = serializer.data
+
         token = jwt.encode({
-            'id': player.id
+            'id': data['id']
         }, settings.SECRET_KEY, algorithm='HS256')
 
-        response = Response(status.HTTP_200_OK)
+        data.pop('id')
+
+        response = Response(data=data, status=status.HTTP_200_OK)
         response.set_cookie('access_token', token)
 
         return response
 
 
 class LogoutView(APIView):
+    @property
+    def allowed_methods(self):
+        return ['get']
+
     def get(self, request, format=None):
-        request.auth.delete()
+        # request.auth.delete()
 
         response = Response()
         response.delete_cookie('access_token')

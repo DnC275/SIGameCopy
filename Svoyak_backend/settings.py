@@ -75,7 +75,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Svoyak_backend.wsgi.application'
+# WSGI_APPLICATION = 'Svoyak_backend.wsgi.application'
+ASGI_APPLICATION = "Svoyak_backend.asgi.application"
 
 
 # Database
