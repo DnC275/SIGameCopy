@@ -43,6 +43,7 @@ class PlayerManager(BaseUserManager):
 class Player(AbstractUser):
     email = models.EmailField('email', db_index=True, max_length=64, unique=True)
     username = models.CharField(max_length=50, blank=False, null=False, unique=True)
+    current_room = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -55,3 +56,14 @@ class Player(AbstractUser):
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=50, blank=False, null=False, unique=True)
+    admin = models.ForeignKey(Player, on_delete=models.CASCADE, null=False)
+    has_access = models.ManyToManyField(Player)
+    # pack = models.ForeignKey('Pack', on_delete=models.)
+
+
+class Pack(models.Model):
+    pass
