@@ -79,3 +79,39 @@ class LogoutView(APIView):
         response = Response()
         response.delete_cookie('access_token')
         return response
+
+
+class RoomViewSet(ModelViewSet):
+    queryset = Room.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = RoomSerializer
+
+    # def create(self, request, *args, **kwargs):
+    #     request.data['admin_id'] = request.user.id
+    #     return super().create(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        admin = Player.objects.get(id=request.user.id)
+        serializer.save(admin=admin)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    # def get_serializer_class(self):
+    #     if self.action == 'list':
+    #         return PlayerShortSerializer
+    #     return PlayerSerializer
+
+
+# class LoginToRoom(APIView):
+#     permission_classes = [IsAuthenticated]
+#
+#     serializer_class = AuthByEmailPasswordSerializer
+#
+#     @property
+#     def allowed_methods(self):
+#         return ['post']
+#
+#     def post(self, request):
+

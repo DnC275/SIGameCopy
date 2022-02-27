@@ -5,6 +5,9 @@ from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
 from django.conf import settings
+from django.contrib.auth.hashers import (
+    check_password, make_password,
+)
 
 
 class PlayerManager(BaseUserManager):
@@ -60,9 +63,22 @@ class Player(AbstractUser):
 
 class Room(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False, unique=True)
-    admin = models.ForeignKey(Player, on_delete=models.CASCADE, null=False)
-    has_access = models.ManyToManyField(Player)
+    password = models.CharField('password', max_length=128)
+    admin = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)  # TODO change to null=False
+    has_access = models.ManyToManyField(Player, related_name='accessible_rooms')
     # pack = models.ForeignKey('Pack', on_delete=models.)
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        # self._password = raw_password
+
+    def check_password(self, raw_password):
+        def setter(raw_password):
+            self.set_password(raw_password)
+            # self._password = None
+            self.save(update_fields=["password"])
+
+        return check_password(raw_password, self.password, setter)
 
 
 class Pack(models.Model):
