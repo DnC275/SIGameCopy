@@ -94,6 +94,9 @@ class RoomViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         admin = Player.objects.get(id=request.user.id)
+        if admin.administration_room is not None:
+            msg = 'Already in game'
+            return Response({'msg': msg}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(admin=admin)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
