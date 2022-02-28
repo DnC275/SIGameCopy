@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import action
 from django.conf import settings
 # from django.contrib.auth import get_user_model, authenticate
 
@@ -46,8 +47,11 @@ class LoginView(APIView):
     def allowed_methods(self):
         return ['post']
 
+    def get_serializer_context(self):
+        return {'request': self.request, 'format': self.format_kwarg, 'view': self}
+
     def get_serializer(self, *args, **kwargs):
-        # kwargs['context'] = self.get_serializer_context()
+        kwargs['context'] = self.get_serializer_context()
         return self.serializer_class(*args, **kwargs)
 
     def post(self, request):
@@ -96,7 +100,7 @@ class RoomViewSet(ModelViewSet):
         admin = Player.objects.get(id=request.user.id)
         if admin.administration_room is not None:
             msg = 'Already in game'
-            return Response({'msg': msg}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(admin=admin)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -107,14 +111,27 @@ class RoomViewSet(ModelViewSet):
     #     return PlayerSerializer
 
 
-# class LoginToRoom(APIView):
-#     permission_classes = [IsAuthenticated]
-#
-#     serializer_class = AuthByEmailPasswordSerializer
-#
-#     @property
-#     def allowed_methods(self):
-#         return ['post']
-#
-#     def post(self, request):
+class LoginToRoomView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = LoginToRoomSerializer
+    # serializer_class = RoomSerializer
 
+    @property
+    def allowed_methods(self):
+        return ['post']
+
+    def get_serializer_context(self):
+        return {'request': self.request, 'format': self.format_kwarg, 'view': self}
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['context'] = self.get_serializer_context()
+        return self.serializer_class(*args, **kwargs)
+
+    def post(self, request, pk):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        room = serializer.validated_data['room']
+        room.has_access.add(request.user)
+
+        return Response(status=status.HTTP_200_OK)

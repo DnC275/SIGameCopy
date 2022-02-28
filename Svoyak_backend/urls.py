@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/signup/', SignUpViewSet.as_view(), name='sign_up'),
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/rooms/<int:pk>/login/', LoginToRoomView.as_view(), name='login_to_room'),
     # path('api/players/', PlayerViewSet.as_view({'get': 'list'}), name='players'),
     path('api/', include(router.urls))
 ]

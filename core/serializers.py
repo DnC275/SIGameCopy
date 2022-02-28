@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from rest_framework.exceptions import NotAuthenticated
+from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from django.contrib.auth import authenticate
 
 from .models import *
@@ -54,11 +54,12 @@ class AuthByEmailPasswordSerializer(ModelSerializer):
 
 class RoomSerializer(ModelSerializer):
     admin = PlayerSerializer(read_only=True)
+    has_access = PlayerSerializer(read_only=True, many=True)
     # admin_id = serializers.IntegerField()
 
     class Meta:
         model = Room
-        fields = ['name', 'password', 'admin']
+        fields = ['name', 'password', 'admin', 'has_access']
         # read_only_fields = ['admin']
         # fields = ['name', 'password', 'admin_id']
         extra_kwargs = {'password': {'write_only': True}}
@@ -75,9 +76,20 @@ class RoomSerializer(ModelSerializer):
         return room
 
 
-# class LoginToRoomSerializer(ModelSerializer):
-#     class Meta:
-#         model = Room
-#         fields = ['id', 'password']
-#
-#     def validate(self, attrs):
+class LoginToRoomSerializer(ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ['password']
+
+    def validate(self, attrs):
+        password = attrs['password']
+        room = Room.objects.get(pk=self.context['view'].kwargs['pk'])
+
+        if not room.check_password(password):
+            raise PermissionDenied('Incorrect password')
+
+        attrs['room'] = room
+        return attrs
+
+
+
