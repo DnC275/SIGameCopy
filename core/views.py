@@ -134,4 +134,4 @@ class LoginToRoomView(APIView):
         room = serializer.validated_data['room']
         room.has_access.add(request.user)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)

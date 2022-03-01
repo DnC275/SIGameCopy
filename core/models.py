@@ -46,7 +46,7 @@ class PlayerManager(BaseUserManager):
 class Player(AbstractUser):
     email = models.EmailField('email', db_index=True, max_length=64, unique=True)
     username = models.CharField(max_length=50, blank=False, null=False, unique=True)
-    current_room = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
+    # current_room = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -67,6 +67,7 @@ class Room(models.Model):
     admin = models.OneToOneField(Player, related_name='administration_room', on_delete=models.CASCADE, db_index=True, null=False)  # TODO change to null=False
     # presenter = models.OneToOneField(Player, related_name='presentation_room', on_delete=models.SET_NULL, null=True)
     has_access = models.ManyToManyField(Player, related_name='accessible_rooms')
+    members = models.ManyToManyField(Player, related_name='current_room')
     # pack = models.ForeignKey('Pack', on_delete=models.)
 
     def set_password(self, raw_password):

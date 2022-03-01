@@ -1,10 +1,13 @@
 import json
+
+import channels.sessions
 from channels.generic.websocket import JsonWebsocketConsumer
 
 
 class GameConsumer(JsonWebsocketConsumer):
     async def connect(self):
-        pass
+        self.room_name = self.scope['url_route']['kwargs']['room_code']
+        self.room_group_name = 'room_%s' % self.room_name
 
     async def disconnect(self, close_code):
         pass
