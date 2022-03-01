@@ -33,7 +33,7 @@ class SignUpViewSet(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        response = Response(status=status.HTTP_201_CREATED)
+        response = Response(data={'status': 'created'}, status=status.HTTP_201_CREATED)
         return response
 
 
