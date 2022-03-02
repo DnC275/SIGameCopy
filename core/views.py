@@ -91,11 +91,16 @@ class LogoutView(APIView):
 class RoomViewSet(ModelViewSet):
     queryset = Room.objects.all()
     permission_classes = [IsAuthenticated]
-    serializer_class = RoomSerializer
+    # serializer_class = RoomSerializer
 
     # def create(self, request, *args, **kwargs):
     #     request.data['admin_id'] = request.user.id
     #     return super().create(request, *args, **kwargs)
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return RoomShortSerializer
+        return RoomSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

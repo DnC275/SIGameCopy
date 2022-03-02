@@ -76,6 +76,12 @@ class RoomSerializer(ModelSerializer):
         return room
 
 
+class RoomShortSerializer(ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ['id', 'name']
+
+
 class LoginToRoomSerializer(ModelSerializer):
     class Meta:
         model = Room
