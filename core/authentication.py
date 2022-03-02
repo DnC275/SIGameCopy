@@ -15,7 +15,7 @@ class CookieAuthentication(TokenAuthentication):
         # Give precedence to 'Authorization' header.
         if 'access_token' in request.COOKIES:
             token = request.COOKIES['access_token']
-            payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms='HS256')
+            payload = Player.resolve_jwt(token)
 
             if 'id' not in payload:
                 raise exceptions.AuthenticationFailed('Invalid token')
