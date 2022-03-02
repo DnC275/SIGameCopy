@@ -9,6 +9,7 @@ cryptography==36.0.1
 daphne==3.0.2
 DateTime==4.4
 Django==4.0.1
+django-cors-headers==3.11.0
 django-extensions==3.1.5
 djangorestframework==3.13.1
 hyperlink==21.0.0
