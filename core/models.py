@@ -72,7 +72,7 @@ class Player(AbstractUser):
         if 'id' not in payload:
             return None
 
-        return cls.objects.get(id=id)
+        return cls.objects.get(id=payload['id'])
 
 
 class Room(models.Model):
