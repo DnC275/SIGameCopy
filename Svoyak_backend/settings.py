@@ -155,3 +155,6 @@ if DEBUG:
     MIDDLEWARE.append(
         'corsheaders.middleware.CorsMiddleware',
     )
+
+
+TOKEN_COOKIE_NAME = 'access_token'
