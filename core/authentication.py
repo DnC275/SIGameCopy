@@ -15,15 +15,11 @@ class CookieAuthentication(TokenAuthentication):
         # Give precedence to 'Authorization' header.
         if 'access_token' in request.COOKIES:
             token = request.COOKIES['access_token']
-            payload = Player.resolve_jwt(token)
 
-            if 'id' not in payload:
+            player = Player.get_by_jwt(token)
+
+            if player is None:
                 raise exceptions.AuthenticationFailed('Invalid token')
-
-            player = Player.objects.get(id=payload['id'])
-
-            if not player:
-                raise exceptions.AuthenticationFailed('Player does not exist')
 
             return player, token
 
