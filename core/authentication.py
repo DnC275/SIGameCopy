@@ -13,6 +13,7 @@ class CookieAuthentication(TokenAuthentication):
     def authenticate(self, request):
         # Check if 'auth_token' is in the request cookies.
         # Give precedence to 'Authorization' header.
+        player, token = None, None
         if 'access_token' in request.COOKIES:
             token = request.COOKIES['access_token']
 
@@ -21,6 +22,5 @@ class CookieAuthentication(TokenAuthentication):
             if player is None:
                 raise exceptions.AuthenticationFailed('Invalid token')
 
-            return player, token
+        return player, token
 
-        return super().authenticate(request)
