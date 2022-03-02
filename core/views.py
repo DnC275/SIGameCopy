@@ -55,6 +55,9 @@ class LoginView(APIView):
         return self.serializer_class(*args, **kwargs)
 
     def post(self, request):
+        if isinstance(request['user'], Player):
+            return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
