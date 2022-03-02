@@ -60,10 +60,19 @@ class Player(AbstractUser):
 
         return token
 
+    # @classmethod
+    # def resolve_jwt(cls, token) -> dict:
+    #     payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms='HS256')
+    #     return payload
+
     @classmethod
-    def resolve_jwt(cls, token) -> dict:
+    def get_by_jwt(cls, token):
         payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms='HS256')
-        return payload
+
+        if 'id' not in payload:
+            return None
+
+        return cls.objects.get(id=id)
 
 
 class Room(models.Model):
