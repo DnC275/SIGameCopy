@@ -60,6 +60,11 @@ class Player(AbstractUser):
 
         return token
 
+    @classmethod
+    def resolve_jwt(cls, token) -> dict:
+        payload = jwt.decode(token, key=settings.SECRET_KEY, algorithms='HS256')
+        return payload
+
 
 class Room(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False, unique=True)
