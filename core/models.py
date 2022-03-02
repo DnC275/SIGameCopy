@@ -78,7 +78,10 @@ class Player(AbstractUser):
 class Room(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False, unique=True)
     password = models.CharField('password', max_length=128)
-    admin = models.OneToOneField(Player, related_name='administration_room', on_delete=models.CASCADE, db_index=True, null=False)  # TODO change to null=False
+    admin = models.ForeignKey(Player, related_name='administration_room', db_index=True, on_delete=models.CASCADE, null=True)
+    # TODO !!! uncomment !!!
+    # admin = models.OneToOneField(Player, related_name='administration_room', on_delete=models.CASCADE, db_index=True,
+    #                              null=False)
     # presenter = models.OneToOneField(Player, related_name='presentation_room', on_delete=models.SET_NULL, null=True)
     has_access = models.ManyToManyField(Player, related_name='accessible_rooms')
     members = models.ManyToManyField(Player, related_name='current_room')
