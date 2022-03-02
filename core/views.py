@@ -1,5 +1,5 @@
 import jwt
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -53,7 +53,7 @@ class LoginView(APIView):
         return self.serializer_class(*args, **kwargs)
 
     def post(self, request):
-        if isinstance(request.user, Player):
+        if not request.data and isinstance(request.user, Player):
             return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(data=request.data)
@@ -89,6 +89,8 @@ class LogoutView(APIView):
 class RoomViewSet(ModelViewSet):
     queryset = Room.objects.all()
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']
     # serializer_class = RoomSerializer
 
     # def create(self, request, *args, **kwargs):
@@ -104,17 +106,12 @@ class RoomViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         admin = Player.objects.get(id=request.user.id)
-        if admin.administration_room is not None:
+        if admin.administration_room is not None and not admin.is_superuser:
             msg = 'Already in game'
             return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(admin=admin)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    # def get_serializer_class(self):
-    #     if self.action == 'list':
-    #         return PlayerShortSerializer
-    #     return PlayerSerializer
 
 
 class LoginToRoomView(APIView):
