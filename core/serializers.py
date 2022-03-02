@@ -59,7 +59,7 @@ class RoomSerializer(ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['name', 'password', 'admin', 'has_access']
+        fields = ['id', 'name', 'password', 'admin', 'has_access']
         # read_only_fields = ['admin']
         # fields = ['name', 'password', 'admin_id']
         extra_kwargs = {'password': {'write_only': True}}
