@@ -54,15 +54,15 @@ class InstanceCookieJWTAuthWrapper:
         """
         # Only save session if we're the outermost session middleware
         if self.activated:
-            modified = self.scope["player"].modified
-            empty = self.scope["player"].is_empty()
+            # modified = self.scope["player"].modified
+            empty = self.scope["player"] is None
             # If this is a message type that we want to save on, and there's
             # changed data, save it. We also save if it's empty as we might
             # not be able to send a cookie-delete along with this message.
             if (
                 message["type"] in self.save_message_types
                 and message.get("status", 200) != 500
-                and (modified or settings.SESSION_SAVE_EVERY_REQUEST)
+                # and (modified or settings.SESSION_SAVE_EVERY_REQUEST)
             ):
                 # await database_sync_to_async(self.save_session)()
                 # If this is a message type that can transport cookies back to the
@@ -73,9 +73,9 @@ class InstanceCookieJWTAuthWrapper:
                         if settings.TOKEN_COOKIE_NAME in self.scope["cookies"]:
                             CookieMiddleware.delete_cookie(
                                 message,
-                                settings.TOKEN_COOKIE_NAME,
-                                path=settings.SESSION_COOKIE_PATH,
-                                domain=settings.SESSION_COOKIE_DOMAIN,
+                                settings.TOKEN_COOKIE_NAME
+                                # path=settings.SESSION_COOKIE_PATH,
+                                # domain=settings.SESSION_COOKIE_DOMAIN,
                             )
                     else:
                         # Get the expiry data
@@ -93,11 +93,11 @@ class InstanceCookieJWTAuthWrapper:
                             self.scope["token"].token,
                             max_age=max_age,
                             expires=expires,
-                            domain=settings.SESSION_COOKIE_DOMAIN,
-                            path=settings.SESSION_COOKIE_PATH,
-                            secure=settings.SESSION_COOKIE_SECURE or None,
-                            httponly=settings.SESSION_COOKIE_HTTPONLY or None,
-                            samesite=settings.SESSION_COOKIE_SAMESITE,
+                            # domain=settings.SESSION_COOKIE_DOMAIN,
+                            # path=settings.SESSION_COOKIE_PATH,
+                            # secure=settings.SESSION_COOKIE_SECURE or None,
+                            # httponly=settings.SESSION_COOKIE_HTTPONLY or None,
+                            # samesite=settings.SESSION_COOKIE_SAMESITE,
                         )
         # Pass up the send
         return await self.real_send(message)
