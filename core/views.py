@@ -38,9 +38,7 @@ class SignUpViewSet(CreateAPIView):
 
 
 class LoginView(APIView):
-    authentication_classes = []
     permission_classes = [AllowAny]
-
     serializer_class = AuthByEmailPasswordSerializer
 
     @property
@@ -55,7 +53,7 @@ class LoginView(APIView):
         return self.serializer_class(*args, **kwargs)
 
     def post(self, request):
-        if isinstance(request['user'], Player):
+        if isinstance(request.user, Player):
             return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(data=request.data)
