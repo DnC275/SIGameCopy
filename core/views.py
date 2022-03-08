@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from django.conf import settings
@@ -85,7 +86,8 @@ class LogoutView(APIView):
         # request.auth.delete()
 
         response = Response()
-        response.delete_cookie('access_token')
+        response.set_cookie('access_token', 'a', -999999, secure=True)
+        response.cookies['access_token']['samesite'] = None
         return response
 
 
@@ -138,6 +140,24 @@ class LoginToRoomView(APIView):
         serializer.is_valid(raise_exception=True)
 
         room = serializer.validated_data['room']
+        player = Player.objects.get(id=request.user.id)
+        if player.current_room.exists() and not player.is_superuser:
+            msg = 'Already in game'
+            return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
         room.has_access.add(request.user)
-
+        room.members.add(request.user)
         return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)
+
+
+class LogoutFromRoomView(GenericAPIView):
+    @property
+    def allowed_methods(self):
+        return ['get']
+
+    def get(self, request, format=None):
+        # request.auth.delete()
+
+        response = Response()
+        room = Room.objects.get(id=request.room.id)
+        room.members.remove(request.user)
+        return response
