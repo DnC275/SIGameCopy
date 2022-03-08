@@ -76,7 +76,9 @@ class Player(AbstractUser):
 
     @property
     def current_room_id(self):
-        return self.current_room.all()[0].id
+        if len(self.current_room.all()) > 0:
+            return self.current_room.all()[0].id
+        return None
 
 
 class Room(models.Model):
