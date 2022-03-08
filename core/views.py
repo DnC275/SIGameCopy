@@ -39,20 +39,13 @@ class SignUpViewSet(CreateAPIView):
         return response
 
 
-class LoginView(APIView):
+class LoginView(GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = AuthByEmailPasswordSerializer
 
     @property
     def allowed_methods(self):
         return ['post']
-
-    def get_serializer_context(self):
-        return {'request': self.request, 'format': self.format_kwarg, 'view': self}
-
-    def get_serializer(self, *args, **kwargs):
-        kwargs['context'] = self.get_serializer_context()
-        return self.serializer_class(*args, **kwargs)
 
     def post(self, request):
         if not request.data and isinstance(request.user, Player):
