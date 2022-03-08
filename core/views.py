@@ -149,10 +149,8 @@ class LogoutFromRoomView(GenericAPIView):
     def allowed_methods(self):
         return ['get']
 
-    def get(self, request, format=None):
-        # request.auth.delete()
-
+    def get(self, request, pk, format=None):
         response = Response()
-        room = Room.objects.get(id=request.room.id)
+        room = Room.objects.get(pk=pk)
         room.members.remove(request.user)
         return response
