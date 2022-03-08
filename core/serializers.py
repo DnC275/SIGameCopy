@@ -32,8 +32,8 @@ class AuthByEmailPasswordSerializer(ModelSerializer):
 
     class Meta:
         model = Player
-        fields = ['id', 'username', 'email', 'password']
-        read_only_fields = ['username']
+        fields = ['id', 'username', 'email', 'password', 'current_room_id']
+        read_only_fields = ['username', 'current_room_id']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, attrs):
@@ -48,6 +48,7 @@ class AuthByEmailPasswordSerializer(ModelSerializer):
 
         attrs['id'] = player.id
         attrs['username'] = player.username
+        attrs['current_room_id'] = player.current_room_id
 
         return attrs
 

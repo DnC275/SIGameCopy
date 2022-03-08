@@ -56,7 +56,9 @@ class LoginView(APIView):
 
     def post(self, request):
         if not request.data and isinstance(request.user, Player):
-            return Response(data={'email': request.user.email, 'username': request.user.username}, status=status.HTTP_200_OK)
+            return Response(data={'email': request.user.email,
+                                  'username': request.user.username,
+                                  'current_room_id': request.user.current_room_id}, status=status.HTTP_200_OK) # TODO change this shit
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
