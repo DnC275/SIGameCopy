@@ -7,6 +7,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from django.conf import settings
+from django.core import serializers as django_serializers
 # from django.contrib.auth import get_user_model, authenticate
 
 from .models import *
@@ -54,7 +55,7 @@ class LoginView(APIView):
 
     def post(self, request):
         if not request.data and isinstance(request.user, Player):
-            return Response(data={'status': 'ok'}, status=status.HTTP_200_OK)
+            return Response(data={'email': request.user.email, 'username': request.user.username}, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
