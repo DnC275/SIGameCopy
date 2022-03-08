@@ -74,6 +74,10 @@ class Player(AbstractUser):
 
         return cls.objects.get(id=payload['id'])
 
+    @property
+    def current_room_id(self):
+        return self.current_room.all()[0].id
+
 
 class Room(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False, unique=True)
