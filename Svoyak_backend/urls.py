@@ -17,12 +17,25 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from core.views import *
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+from django.urls import path, include
 # from rest_framework.authtoken.views import obtain_auth_token
 
 router = routers.DefaultRouter()
 
 router.register(r'rooms', RoomViewSet, basename='rooms')
 router.register(r'players', PlayerViewSet, basename='players')
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Svoyak backend",
+      default_version='v1',
+      description="Бэкэнд для Svoyak"
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 
 urlpatterns = [
@@ -32,5 +45,6 @@ urlpatterns = [
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/rooms/<int:pk>/login/', LoginToRoomView.as_view(), name='login_to_room'),
     # path('api/players/', PlayerViewSet.as_view({'get': 'list'}), name='players'),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 ]
