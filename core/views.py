@@ -155,6 +155,6 @@ class LogoutFromRoomView(GenericAPIView):
         room.members.remove(request.user)
         player = Player.objects.get(id=request.user.id)
         if player.administration_room.exists():
-            player.administration_room.remove(request.room)
+            player.administration_room.remove(room)
             room.delete()
         return response
