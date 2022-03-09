@@ -106,7 +106,7 @@ class RoomViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         admin = Player.objects.get(id=request.user.id)
-        if admin.administration_room.exists() and not admin.is_superuser:
+        if (admin.administration_room.exists() or admin.current_room.exists()) and not admin.is_superuser:
             msg = 'Already in game'
             return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(admin=admin)
@@ -153,4 +153,8 @@ class LogoutFromRoomView(GenericAPIView):
         response = Response()
         room = Room.objects.get(pk=pk)
         room.members.remove(request.user)
+        player = Player.objects.get(id=request.user.id)
+        if player.administration_room.exists():
+            player.administration_room.remove(request.room)
+            room.delete()
         return response
