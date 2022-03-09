@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Player
+from .models import *
 
 
 class PlayerAdmin(admin.ModelAdmin):
@@ -7,4 +7,4 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Player, PlayerAdmin)
-
+admin.site.register(Room)
