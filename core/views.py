@@ -109,7 +109,7 @@ class RoomViewSet(ModelViewSet):
         if (admin.administration_room.exists() or admin.current_room.exists()) and not admin.is_superuser:
             msg = 'Already in game'
             return Response({'detail': msg}, status=status.HTTP_403_FORBIDDEN)
-        serializer.save(admin=admin, members=admin)
+        serializer.save(admin=admin, members=[admin])
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
