@@ -55,12 +55,13 @@ class AuthByEmailPasswordSerializer(ModelSerializer):
 
 class RoomSerializer(ModelSerializer):
     admin = PlayerSerializer(read_only=True)
-    has_access = PlayerSerializer(read_only=True, many=True)
+    # has_access = PlayerSerializer(read_only=True, many=True)
     # admin_id = serializers.IntegerField()
+    members = PlayerSerializer(read_only=True, many=True)
 
     class Meta:
         model = Room
-        fields = ['id', 'name', 'password', 'admin', 'has_access']
+        fields = ['id', 'name', 'password', 'admin', 'members']
         # read_only_fields = ['admin']
         # fields = ['name', 'password', 'admin_id']
         extra_kwargs = {'password': {'write_only': True}}

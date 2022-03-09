@@ -89,7 +89,7 @@ class Room(models.Model):
     # admin = models.OneToOneField(Player, related_name='administration_room', on_delete=models.CASCADE, db_index=True,
     #                              null=False)
     # presenter = models.OneToOneField(Player, related_name='presentation_room', on_delete=models.SET_NULL, null=True)
-    has_access = models.ManyToManyField(Player, related_name='accessible_rooms')
+    # has_access = models.ManyToManyField(Player, related_name='accessible_rooms')
     members = models.ManyToManyField(Player, related_name='current_room')
     # pack = models.ForeignKey('Pack', on_delete=models.)
 
