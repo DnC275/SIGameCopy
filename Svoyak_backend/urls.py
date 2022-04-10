@@ -24,6 +24,7 @@ from rest_framework import permissions
 from django.urls import path, include
 # from rest_framework.authtoken.views import obtain_auth_token
 
+
 router = routers.DefaultRouter()
 
 router.register(r'rooms', RoomViewSet, basename='rooms')
