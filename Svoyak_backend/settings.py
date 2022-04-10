@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 
 from pathlib import Path
+
+import channels.layers
+import channels_redis.core
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -46,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'channels',
-    'core',
+    'core.players.apps.PlayersConfig',
+    'core.rooms.apps.RoomsConfig',
+    'core.packs.apps.PacksConfig',
     'django_extensions',
     'drf_yasg',
 ]
@@ -116,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTH_USER_MODEL = 'core.Player'
+AUTH_USER_MODEL = 'players.Player'
 
 
 # Internationalization
@@ -146,11 +151,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'core.authentication.CookieAuthentication',
+        'core.players.authentication.CookieAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
     ]
+}
+
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("0.0.0.0", 6379)],
+        },
+    },
 }
 
 
@@ -171,3 +192,12 @@ if DEBUG:
 
 
 TOKEN_COOKIE_NAME = 'access_token'
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'aadsvoyak@gmail.com' # put your gmail address here
+EMAIL_HOST_PASSWORD = 'prikolchiki123'
+EMAIL_USE_TLS = True

@@ -5,7 +5,7 @@ from django.utils.functional import LazyObject
 from channels.db import database_sync_to_async
 from channels.sessions import CookieMiddleware
 
-from .models import Player
+from core.players.models import Player
 
 try:
     from django.utils.http import http_date
@@ -24,7 +24,7 @@ class InstanceCookieJWTAuthWrapper:
 
         self.scope = dict(scope)
 
-        if "player" in self.scope:
+        if "user" in self.scope:
             # There's already session middleware of some kind above us, pass
             # that through
             self.activated = False
@@ -36,15 +36,15 @@ class InstanceCookieJWTAuthWrapper:
                     "inside of CookieMiddleware."
                 )
             # Parse the headers in the scope into cookies
-            self.scope["player"] = LazyObject()
+            self.scope["user"] = LazyObject()
             self.activated = True
 
         # Override send
         self.real_send = send
 
-    async def resolve_player(self):
+    async def resolve_user(self):
         token = self.scope["cookies"].get(self.cookie_name)
-        self.scope["player"]._wrapped = await database_sync_to_async(
+        self.scope["user"]._wrapped = await database_sync_to_async(
             Player.get_by_jwt
         )(token)
 
@@ -55,7 +55,7 @@ class InstanceCookieJWTAuthWrapper:
         # Only save session if we're the outermost session middleware
         if self.activated:
             # modified = self.scope["player"].modified
-            empty = self.scope["player"] is None
+            empty = self.scope["user"] is None
             # If this is a message type that we want to save on, and there's
             # changed data, save it. We also save if it's empty as we might
             # not be able to send a cookie-delete along with this message.
@@ -79,11 +79,11 @@ class InstanceCookieJWTAuthWrapper:
                             )
                     else:
                         # Get the expiry data
-                        if self.scope["player"].get_expire_at_browser_close():
+                        if self.scope["user"].get_expire_at_browser_close():
                             max_age = None
                             expires = None
                         else:
-                            max_age = self.scope["player"].get_expiry_age()
+                            max_age = self.scope["user"].get_expiry_age()
                             expires_time = time.time() + max_age
                             expires = http_date(expires_time)
                         # Set the cookie
@@ -114,7 +114,7 @@ class CookieJWTAuthMiddleware:
         """
         wrapper = InstanceCookieJWTAuthWrapper(scope, send)
 
-        await wrapper.resolve_player()
+        await wrapper.resolve_user()
 
         return await self.inner(wrapper.scope, receive, wrapper.send)
 

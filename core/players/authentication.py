@@ -3,7 +3,7 @@ from django.conf import settings
 from rest_framework import exceptions
 from rest_framework.authentication import TokenAuthentication
 
-from .models import Player
+from core.players.models import Player
 
 
 class CookieAuthentication(TokenAuthentication):

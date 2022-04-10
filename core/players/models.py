@@ -1,15 +1,12 @@
-from datetime import datetime
-
 import jwt
 from django.db import models
 # from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, AbstractUser
+from django.contrib.auth.models import BaseUserManager, AbstractUser
 from django.conf import settings
-from django.contrib.auth.hashers import (
-    check_password, make_password,
-)
+from django.contrib.auth.hashers import make_password, check_password
 
 
+# Create your models here.
 class PlayerManager(BaseUserManager):
     """
     Custom player model manager where username is the unique identifiers
@@ -108,3 +105,4 @@ class Room(models.Model):
 
 class Pack(models.Model):
     pass
+

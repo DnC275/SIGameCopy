@@ -8,15 +8,17 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
 import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Svoyak_backend.settings')
+django.setup()
 
 from django.core.asgi import get_asgi_application
 # from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from core.middleware import CookieJWTAuthMiddlewareStack
+from core.players.middleware import CookieJWTAuthMiddlewareStack
 
 import core.routing
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Svoyak_backend.settings')
 
 # application = get_asgi_application()
 application = ProtocolTypeRouter({
