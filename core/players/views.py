@@ -13,7 +13,7 @@ from django.core import serializers as django_serializers
 
 from .models import *
 from .serializers import *
-from core.tasks import send_email_task
+# from core.tasks import send_email_task
 
 # Create your views here.
 class PlayerViewSet(ModelViewSet):
@@ -35,7 +35,7 @@ class SignUpViewSet(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        send_email_task.delay('aboba')
+        # send_email_task.delay('aboba')
 
 
         response = Response(data={'status': 'created'}, status=status.HTTP_201_CREATED)
