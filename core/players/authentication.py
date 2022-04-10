@@ -11,6 +11,7 @@ class CookieAuthentication(TokenAuthentication):
     Extend the TokenAuthentication class to support cookie based authentication
     """
     def authenticate(self, request):
+        print(request.COOKIES)
         # Check if 'auth_token' is in the request cookies.
         # Give precedence to 'Authorization' header.
         player, token = None, None
