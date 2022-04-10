@@ -7,4 +7,4 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Player, PlayerAdmin)
-admin.site.register(Room)
+
