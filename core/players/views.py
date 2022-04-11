@@ -69,8 +69,8 @@ class LoginView(GenericAPIView):
         data['access_token'] = token
 
         response = Response(data=data, status=status.HTTP_200_OK)
-        # response.set_cookie('access_token', token)
-        # response.cookies['access_token']['samesite'] = None
+        response.set_cookie('access_token', token, secure=True)
+        response.cookies['access_token']['samesite'] = None
         response['Access-Control-Allow-Origin'] = 'Authorization'
 
         return response
