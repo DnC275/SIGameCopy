@@ -37,7 +37,6 @@ class SignUpViewSet(CreateAPIView):
         self.perform_create(serializer)
         # send_email_task.delay('aboba')
 
-
         response = Response(data={'status': 'created'}, status=status.HTTP_201_CREATED)
         return response
 
@@ -69,9 +68,8 @@ class LoginView(GenericAPIView):
         data['access_token'] = token
 
         response = Response(data=data, status=status.HTTP_200_OK)
-        response.set_cookie('access_token', token, secure=True)
-        response.cookies['access_token']['samesite'] = None
-        response['Access-Control-Allow-Origin'] = 'Authorization'
+        # response.set_cookie('access_token', token, secure=True)
+        # response.cookies['access_token']['samesite'] = None
 
         return response
 
@@ -85,6 +83,5 @@ class LogoutView(APIView):
         # request.auth.delete()
 
         response = Response()
-        response.set_cookie('access_token', 'a', -999999, secure=True)
-        response.cookies['access_token']['samesite'] = None
+        # del response['Access_token']
         return response

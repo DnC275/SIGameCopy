@@ -151,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'core.players.authentication.CookieAuthentication',
+        'core.players.authentication.JWTAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
@@ -191,7 +191,7 @@ if DEBUG:
     )
 
 
-TOKEN_COOKIE_NAME = 'access_token'
+# TOKEN_HEADER_NAME = 'Access_token'
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
