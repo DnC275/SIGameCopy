@@ -66,6 +66,7 @@ PROJECT_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_CONTRIB_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
+    'core.players.middleware.CustomMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,7 +75,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'core.players.middleware.CustomMiddleware',
 ]
 
 ROOT_URLCONF = 'Svoyak_backend.urls'
