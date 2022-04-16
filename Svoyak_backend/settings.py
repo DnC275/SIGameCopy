@@ -201,6 +201,14 @@ if DEBUG:
         'Access-Control-Allow-Credentials',
         'Access-Control-Allow-Credentials',
     ]
+    CORS_ALLOW_METHODS = [
+        "DELETE",
+        "GET",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT",
+    ]
     # CORS_ORIGIN_WHITELIST = (
     #     'http://localhost:3000',
     #     'http://127.0.0.1:3000',
