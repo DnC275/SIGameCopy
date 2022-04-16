@@ -15,6 +15,7 @@ from pathlib import Path
 
 import channels.layers
 import channels_redis.core
+import corsheaders.middleware
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -184,7 +185,7 @@ CHANNEL_LAYERS = {
 
 
 if DEBUG:
-    CORS_ALLOW_CREDENTIALS = True
+    # CORS_ALLOW_CREDENTIALS = True
     CORS_ALLOW_ALL_ORIGINS = True
     CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_HEADERS = [
@@ -199,7 +200,6 @@ if DEBUG:
         'x-requested-with',
         'Access-Control-Allow-Headers',
         'Access-Control-Allow-Credentials',
-        'Access-Control-Allow-Credentials',
     ]
     CORS_ALLOW_METHODS = [
         "DELETE",
@@ -209,16 +209,14 @@ if DEBUG:
         "POST",
         "PUT",
     ]
-    CORS_ORIGIN_WHITELIST = (
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
+    # CORS_ORIGIN_WHITELIST = (
+    #     'http://localhost:3000',
+    #     'http://127.0.0.1:3000',
     #     'https://jolly-morse-6d6dc0.netlify.app'
-    )
+    # )
     INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
 
     MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
-
-
 
 # TOKEN_HEADER_NAME = 'Access_token'
 
