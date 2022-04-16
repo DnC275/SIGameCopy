@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils.functional import LazyObject
 from channels.db import database_sync_to_async
 from channels.auth import AuthMiddlewareStack
+from django.utils.deprecation import MiddlewareMixin
 
 from core.players.models import Player
 
@@ -31,4 +32,11 @@ class TokenAuthMiddleware:
 
 JWTAuthMiddlewareStack = lambda inner: TokenAuthMiddleware(AuthMiddlewareStack(inner))
 
+
+class CustomMiddleware(MiddlewareMixin):
+    def process_response(
+            self, request, response
+    ):
+        print(response.headers)
+        return response
 

@@ -74,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'core.players.middleware.CustomMiddleware',
 ]
 
 ROOT_URLCONF = 'Svoyak_backend.urls'
