@@ -34,9 +34,14 @@ JWTAuthMiddlewareStack = lambda inner: TokenAuthMiddleware(AuthMiddlewareStack(i
 
 
 class CustomMiddleware(MiddlewareMixin):
-    def process_response(
-            self, request, response
-    ):
+    def __call__(self, request):
+        response = super(CustomMiddleware, self).__call__(request)
         print(response.headers)
         return response
+
+    # def process_response(
+    #         self, request, response
+    # ):
+    #     print(response.headers)
+    #     return response
 
