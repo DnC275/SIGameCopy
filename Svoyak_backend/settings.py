@@ -40,21 +40,29 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_CONTRIB_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+THIRD_PARTY_APPS = [
     'rest_framework',
     'channels',
-    'core.players.apps.PlayersConfig',
-    'core.rooms.apps.RoomsConfig',
-    'core.packs.apps.PacksConfig',
     'django_extensions',
     'drf_yasg',
 ]
+
+PROJECT_APPS = [
+    'core.players.apps.PlayersConfig',
+    'core.rooms.apps.RoomsConfig',
+    'core.packs.apps.PacksConfig',
+]
+
+INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_CONTRIB_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -198,12 +206,10 @@ if DEBUG:
     #     'http://127.0.0.1:3000',
     #     'https://jolly-morse-6d6dc0.netlify.app'
     # )
-    INSTALLED_APPS.append(
-        'corsheaders'
-    )
-    MIDDLEWARE.append(
-        'corsheaders.middleware.CorsMiddleware',
-    )
+    INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
+
+    MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
+
 
 
 # TOKEN_HEADER_NAME = 'Access_token'
