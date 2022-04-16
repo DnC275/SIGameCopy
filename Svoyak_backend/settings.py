@@ -209,11 +209,11 @@ if DEBUG:
         "POST",
         "PUT",
     ]
-    # CORS_ORIGIN_WHITELIST = (
-    #     'http://localhost:3000',
-    #     'http://127.0.0.1:3000',
+    CORS_ORIGIN_WHITELIST = (
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
     #     'https://jolly-morse-6d6dc0.netlify.app'
-    # )
+    )
     INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
 
     MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
