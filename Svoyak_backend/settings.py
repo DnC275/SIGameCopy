@@ -189,6 +189,9 @@ if DEBUG:
         'user-agent',
         'x-csrftoken',
         'x-requested-with',
+        'Access-Control-Allow-Headers',
+        'Access-Control-Allow-Credentials',
+        'Access-Control-Allow-Credentials',
     ]
     # CORS_ORIGIN_WHITELIST = (
     #     'http://localhost:3000',
