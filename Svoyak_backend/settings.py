@@ -51,7 +51,7 @@ DJANGO_CONTRIB_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'corsheaders',
+    # 'corsheaders',
     'rest_framework',
     'channels',
     'django_extensions',
@@ -70,7 +70,7 @@ MIDDLEWARE = [
     'core.players.middleware.CustomMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -220,9 +220,9 @@ if DEBUG:
     #     'http://127.0.0.1:3000',
     #     'https://jolly-morse-6d6dc0.netlify.app'
     # )
-    # INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
+    INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
 
-    # MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
+    MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
 
 # TOKEN_HEADER_NAME = 'Access_token'
 
