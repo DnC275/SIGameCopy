@@ -51,6 +51,7 @@ DJANGO_CONTRIB_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'corsheaders',
     'rest_framework',
     'channels',
     'django_extensions',
@@ -66,12 +67,11 @@ PROJECT_APPS = [
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_CONTRIB_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-
     'core.players.middleware.CustomMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -187,7 +187,9 @@ CHANNEL_LAYERS = {
 # }
 
 
-if DEBUG:
+CORS_ORIGIN_ALLOW_ALL = True
+
+# if DEBUG:
     # CORS_ALLOW_CREDENTIALS = True
     # CORS_ALLOW_ALL_ORIGINS = True
     # CORS_ORIGIN_ALLOW_ALL = True
@@ -204,23 +206,23 @@ if DEBUG:
     #     'Access-Control-Allow-Headers',
     #     'Access-Control-Allow-Credentials',
     # ]
-    CORS_ALLOW_METHODS = [
-        "DELETE",
-        "GET",
-        "OPTIONS",
-        "PATCH",
-        "POST",
-        "PUT",
-    ]
-    CORS_ALLOWED_ORIGIN = [
-        'http://localhost:3000'
-    ]
+    # CORS_ALLOW_METHODS = [
+    #     "DELETE",
+    #     "GET",
+    #     "OPTIONS",
+    #     "PATCH",
+    #     "POST",
+    #     "PUT",
+    # ]
+    # CORS_ALLOWED_ORIGIN = [
+    #     'http://localhost:3000'
+    # ]
     # CORS_ORIGIN_WHITELIST = (
     #     'http://localhost:3000',
     #     'http://127.0.0.1:3000',
     #     'https://jolly-morse-6d6dc0.netlify.app'
     # )
-    INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
+    # INSTALLED_APPS = ['corsheaders'] + INSTALLED_APPS
 
     # MIDDLEWARE = ['corsheaders.middleware.CorsMiddleware'] + MIDDLEWARE
 
