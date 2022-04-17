@@ -206,14 +206,14 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Headers',
     'Access-Control-Allow-Credentials',
 ]
-    # CORS_ALLOW_METHODS = [
-    #     "DELETE",
-    #     "GET",
-    #     "OPTIONS",
-    #     "PATCH",
-    #     "POST",
-    #     "PUT",
-    # ]
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
     # CORS_ALLOWED_ORIGIN = [
     #     'http://localhost:3000'
     # ]
