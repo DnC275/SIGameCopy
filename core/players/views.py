@@ -83,5 +83,18 @@ class LogoutView(APIView):
         # request.auth.delete()
 
         response = Response()
-        # del response['Access_token']
         return response
+
+
+
+def verify(request, uuid):
+    try:
+        user = Player.objects.get(verification_uuid=uuid, is_verified=False)
+    except Exception:
+        return Response(data={'status': 'User does not exist or is already verified'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    user.is_verified = True
+    user.save()
+    response = Response(data={'status': 'created'}, status=status.HTTP_201_CREATED)
+    return response
+

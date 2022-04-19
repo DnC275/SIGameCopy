@@ -1,4 +1,5 @@
 import jwt
+import uuid
 from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractUser
@@ -44,7 +45,8 @@ class Player(AbstractUser):
     email = models.EmailField('email', db_index=True, max_length=64, unique=True)
     username = models.CharField(max_length=50, blank=False, null=False, unique=True)
     # current_room = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
-
+    is_verified = models.BooleanField('verified', default=False)
+    verification_uuid = models.UUIDField('Unique Verification UUID', default=uuid.uuid4)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -77,3 +79,23 @@ class Player(AbstractUser):
             return self.current_room.all()[0].id
         return None
 
+
+from django.db.models import signals
+from django.core.mail import send_mail
+from django.urls import reverse
+
+
+def user_post_save(sender, instance, signal, *args, **kwargs):
+    if not instance.is_verified:
+        # Send verification email
+        send_mail(
+            'Verify your QuickPublisher account',
+            'Follow this link to verify your account: '
+            'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(instance.verification_uuid)}),
+            'no-reply.svoyak@yandex.ru',
+            [instance.email],
+            fail_silently=False,
+        )
+
+
+signals.post_save.connect(user_post_save, sender=Player)
