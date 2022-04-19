@@ -1,1 +1,1 @@
-web: gunicorn Svoyak_backend.asgi --log-file -
+web: gunicorn Svoyak_backend.asgi:application -k uvicorn.workers.UvicornWorker
