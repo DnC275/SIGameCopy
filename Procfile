@@ -1,1 +1,1 @@
-web: gunicorn Svoyak_backend.wsgi --log-file -
+web: gunicorn Svoyak_backend.asgi --log-file -
