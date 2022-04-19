@@ -9,13 +9,15 @@ from django.db import transaction
 from core.rooms.models import *
 
 
-@receiver(signal=post_save, sender=Room, dispatch_uid='update_rooms_in_lobby')
-def update_rooms_in_lobby(sender, instance, created, **kwargs):
-    transaction.on_commit(lambda: __update_rooms_in_lobby(sender, instance, created, **kwargs))
+@receiver(signal=post_delete, sender=Room, dispatch_uid='update_rooms_in_lobby_on_delete')
+@receiver(signal=post_save, sender=Room, dispatch_uid='update_rooms_in_lobby_on_create')
+def update_rooms_in_lobby(sender, instance, *args, **kwargs):
+    print(kwargs)
+    transaction.on_commit(lambda: __update_rooms_in_lobby(sender, instance, **kwargs))
 
 
-def __update_rooms_in_lobby(sender, instance, created, **kwargs):
-    if created or (kwargs['update_fields'] is not None and 'name' in kwargs['update_fields']):
+def __update_rooms_in_lobby(sender, instance, **kwargs):
+    if 'created' not in kwargs or kwargs['created'] or (kwargs['update_fields'] is not None and 'name' in kwargs['update_fields']):
         channel_layer = channels.layers.get_channel_layer()
 
         rooms = Room.get_all_room_names()
@@ -24,6 +26,6 @@ def __update_rooms_in_lobby(sender, instance, created, **kwargs):
             'lobby',
             {
                 'type': 'send_updates',
-                'rooms': rooms
+                'message': rooms
             }
         )

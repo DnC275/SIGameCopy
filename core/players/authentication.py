@@ -12,7 +12,7 @@ class JWTAuthentication(TokenAuthentication):
         # Check if 'auth_token' is in the request cookies.
         # Give precedence to 'Authorization' header.
         player = None
-        token = request.headers.get('Authorization')
+        token = request.headers.get(settings.TOKEN_HEADER_NAME)
         if token:
             player = Player.get_by_jwt(token)
             #

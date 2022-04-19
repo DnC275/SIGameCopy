@@ -36,7 +36,7 @@ class RoomsListConsumer(JsonWebsocketConsumer):
         print('Connecting...')
         # self.channel_name = 'channel_%s' % self.scope['user'].id
         time = datetime.now().time()
-        self.channel_name = 'channel_%s' % ('_'.join([str(time.hour), str(time.second), str(time.microsecond)]))
+        self.connection_name = 'connection_%s' % ('_'.join([str(time.hour), str(time.second), str(time.microsecond)]))
 
         async_to_sync(self.channel_layer.group_add)(
             'lobby',
@@ -46,21 +46,21 @@ class RoomsListConsumer(JsonWebsocketConsumer):
         self.accept()
 
         rooms = Room.get_all_room_names()
-        async_to_sync(self.channel_layer.group_send)('lobby', {
-            'type': 'send.updates',
-            'content': 'aboba'
-        })
+        # async_to_sync(self.channel_layer.group_send)('lobby', {
+        #     'type': 'send_updates',
+        #     'message': 'aboba'
+        # })
 
         print('Connected')
 
-        # self.send_json({
-        #     'rooms': rooms
-        # })
+        self.send_json({
+            'rooms': rooms
+        })
 
     def send_updates(self, event):
         print('Sending updates...')
         self.send_json({
-            'rooms': event['content']
+            'rooms': event['message']
         })
         print('Updates sent')
 
