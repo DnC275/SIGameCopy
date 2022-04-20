@@ -4,6 +4,9 @@ from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import BaseUserManager, AbstractUser
 from django.conf import settings
+from django.db.models import signals
+from django.core.mail import send_mail
+from django.urls import reverse
 from django.contrib.auth.hashers import make_password, check_password
 
 
@@ -80,22 +83,17 @@ class Player(AbstractUser):
         return None
 
 
-from django.db.models import signals
-from django.core.mail import send_mail
-from django.urls import reverse
-
-
 def user_post_save(sender, instance, signal, *args, **kwargs):
     if not instance.is_verified:
         # Send verification email
-        send_mail(
-            'Verify your QuickPublisher account',
-            'Follow this link to verify your account: '
-            'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(instance.verification_uuid)}),
-            'no-reply.svoyak@yandex.ru',
-            [instance.email],
-            fail_silently=False,
-        )
+        from django.core.mail import EmailMultiAlternatives
+
+        subject, from_email, to = 'Svoyak verify', 'no-reply.svoyak@yandex.ru', instance.email
+        html_content = f"<a href=https://jolly-morse-6d6dc0.netlify.app/registration_verify/?id={instance.verification_uuid)}> Thanks for reginstration on Svoyak! Please follow the link to verify your account</a>"
+        msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
+        msg.content_subtype = "html"
+        print(1)
+        msg.send()
 
 
 signals.post_save.connect(user_post_save, sender=Player)
