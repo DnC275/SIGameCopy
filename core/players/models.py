@@ -89,10 +89,9 @@ def user_post_save(sender, instance, signal, *args, **kwargs):
         from django.core.mail import EmailMultiAlternatives
 
         subject, from_email, to = 'Svoyak verify', 'no-reply.svoyak@yandex.ru', instance.email
-        html_content = f"<a href=https://jolly-morse-6d6dc0.netlify.app/registration_verify/?id={instance.verification_uuid)}> Thanks for reginstration on Svoyak! Please follow the link to verify your account</a>"
+        html_content = f"<a href=https://jolly-morse-6d6dc0.netlify.app/registration_verify/?id={instance.verification_uuid}> Thanks for reginstration on Svoyak! Please follow the link to verify your account</a>"
         msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
         msg.content_subtype = "html"
-        print(1)
         msg.send()
 
 
