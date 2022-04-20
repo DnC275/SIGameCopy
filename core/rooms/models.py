@@ -38,4 +38,4 @@ class Room(models.Model):
 
     @classmethod
     def get_all_room_names(cls):
-        return list(Room.objects.all().values_list('name', flat=True))
+        return list(Room.objects.all())
